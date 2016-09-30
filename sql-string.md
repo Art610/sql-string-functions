@@ -222,6 +222,23 @@ Result:
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | 0          | 4           | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | 0          | 4           | 
 ```
+Using LOCATE string function with string:
+```sql
+SELECT entity, datetime, value, 
+    LOCATE('92', '292.589') 
+FROM testunits610 
+```
+Result:
+```
+| entity            | datetime                 | value       | LOCATE('92','292.589') | 
+|-------------------|--------------------------|-------------|------------------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | 292.589     | 2                      | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | -292.589    | 2                      | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | -7934.14159 | 2                      | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | 897.328     | 2                      | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | -728.394    | 2                      | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | 827.349     | 2                      | 
+```
 
 Using SUBSTR string function with 'entity' column:
 ```sql
