@@ -1,4 +1,4 @@
-Examples for GROUP BY clause:
+**Examples for GROUP BY clause:**
 
 ```sql
 SELECT entity, datetime AS 'time', tags.test01, tags.test02,
