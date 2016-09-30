@@ -2,63 +2,35 @@
 
 Using with LIKE and NOT LIKE predicates:
 ```sql
-SELECT entity, datetime AS 'time', value, tags.test01
-    FROM testunits610
-WHERE tags.test01 LIKE 't1_610'
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (UPPER (REPLACE (tags.test02,  't2_61', 'test4#34')) LIKE 'TEST4#340')
 ```
 Result:
 ```
-| entity            | time                     | value       | tags.test01 | 
-|-------------------|--------------------------|-------------|-------------| 
-| testinterpolent01 | 2016-01-01T09:00:00.000Z | -7934.14159 | t1_610      | 
-| testinterpolent01 | 2016-01-02T09:00:00.000Z | 897.328     | t1_610      | 
-| testinterpolent01 | 2016-01-02T09:30:00.000Z | -728.394    | t1_610      | 
-| testinterpolent01 | 2016-01-02T09:43:00.000Z | 827.349     | t1_610      | 
-| testinterpolent01 | 2016-01-02T10:00:00.000Z | 615.729     | t1_610      | 
-| testinterpolent01 | 2016-01-02T10:30:00.000Z | 159.832     | t1_610      | 
-| testinterpolent01 | 2016-01-02T11:00:00.000Z | 492.73      | t1_610      | 
-| testinterpolent02 | 2016-06-01T09:00:00.000Z | -2983.829   | t1_610      | 
-| testinterpolent02 | 2016-06-01T09:12:00.000Z | 902.1023    | t1_610      | 
+| entity            | time                     | tags.test01 | tags.test02 | tags                                                          | 
+|-------------------|--------------------------|-------------|-------------|---------------------------------------------------------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
 ```
 
 ```sql
-SELECT entity, datetime AS 'time', value, tags.test01
-    FROM testunits610
-WHERE tags.test01 NOT LIKE 't1_610'
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (LOWER (REPLACE (tags.test01,  't1_6', 'TES2@$3')) NOT LIKE 'tes2@$310')
 ```
 Result:
 ```
-| entity            | time                     | value             | tags.test01 | 
-|-------------------|--------------------------|-------------------|-------------| 
-| testinterpolent01 | 1981-09-20T08:00:00.000Z | 292.589           | null        | 
-| testinterpolent01 | 1996-09-20T08:00:00.000Z | -292.589          | null        | 
-| testinterpolent01 | 2016-02-01T09:00:00.000Z | -483.972          | null        | 
-| testinterpolent01 | 2016-02-01T09:30:00.000Z | 483.924           | null        | 
-| testinterpolent01 | 2016-02-01T10:00:00.000Z | 295.196           | null        | 
-| testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205          | null        | 
-| testinterpolent01 | 2016-08-20T13:10:09.000Z | 432154352.454523  | null        | 
-| testinterpolent01 | 2016-08-20T13:10:09.289Z | 432154352.454523  | null        | 
-| testinterpolent01 | 2016-09-20T09:00:00.000Z | 365.3453063964844 | null        | 
-| testinterpolent01 | 2016-09-20T09:30:00.000Z | 341.4549865722656 | null        | 
-| testinterpolent01 | 2016-09-20T10:00:00.000Z | 564.3939819335938 | null        | 
-```
-
-```sql
-SELECT entity, datetime AS 'time', tags.test01, tags.test012
-    FROM testunits610
-WHERE tags.test01 NOT LIKE 't1_610'
-	OR tags.test012 LIKE 'UPPCASETAG'
-```
-Result:
-```
-| entity            | time                     | tags.test01 | tags.test012 | 
-|-------------------|--------------------------|-------------|--------------| 
-| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null         | 
-| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null         | 
-| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | null         | 
-| testinterpolent01 | 2016-09-24T13:00:00.000Z | null        | null         | 
-| testinterpolent01 | 2016-09-29T08:06:26.000Z | null        | null         | 
-| testinterpolent01 | 2016-09-29T08:06:26.000Z | null        | UPPCASETAG   | 
+| entity            | time                     | tags.test01 | tags.test02 | tags                                                          | 
+|-------------------|--------------------------|-------------|-------------|---------------------------------------------------------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
 ```
 
 ```sql
@@ -117,22 +89,6 @@ Using with IN and NOT IN predicates:
 SELECT entity, datetime AS 'time', value,
     CONCAT(tags.test01, tags.test02) AS 'tags'
 	FROM testunits610
-WHERE tags.test02 IN ('t2_610')
-```
-Result:
-```
-| entity            | time                     | value    | tags   | 
-|-------------------|--------------------------|----------|--------| 
-| testinterpolent01 | 2016-02-01T09:00:00.000Z | -483.972 | t2_610 | 
-| testinterpolent01 | 2016-02-01T09:30:00.000Z | 483.924  | t2_610 | 
-| testinterpolent01 | 2016-02-01T10:00:00.000Z | 295.196  | t2_610 | 
-| testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205 | t2_610 | 
-```
-
-```sql
-SELECT entity, datetime AS 'time', value,
-    CONCAT(tags.test01, tags.test02) AS 'tags'
-	FROM testunits610
 WHERE tags.test02 IN ('t2_610', 'newtesttag')
 ```
 Result:
@@ -147,46 +103,23 @@ Result:
 ```
 
 ```sql
-SELECT entity, datetime AS 'time', 
-    	ISNULL (tags.test01, 'N/A') AS 'tags.test01',
-    	ISNULL (tags.test02, 'N/A') AS 'tags.test02'
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
 	FROM testunits610
-WHERE tags.test02  NOT IN ('t2_610', 'newtesttag')
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (REPLACE (tags.test01, '_610', 't') IN ('t1t') 
+		AND  REPLACE (tags.test01, '_610', 't') NOT IN ('t1_610') )
 ```
 Result:
 ```
-entity	time	tags.test01	tags.test02
-testinterpolent01	1981-09-20T08:00:00.000Z	N/A	N/A
-testinterpolent01	1996-09-20T08:00:00.000Z	N/A	N/A
-testinterpolent01	2016-01-01T09:00:00.000Z	t1_610	N/A
-testinterpolent01	2016-01-02T09:00:00.000Z	t1_610	N/A
-testinterpolent01	2016-01-02T09:30:00.000Z	t1_610	N/A
-testinterpolent01	2016-01-02T09:43:00.000Z	t1_610	N/A
-testinterpolent01	2016-01-02T10:00:00.000Z	t1_610	N/A
-testinterpolent01	2016-01-02T10:30:00.000Z	t1_610	N/A
-testinterpolent01	2016-01-02T11:00:00.000Z	t1_610	N/A
-testinterpolent01	2016-08-20T13:10:09.000Z	N/A	N/A
-testinterpolent01	2016-08-20T13:10:09.289Z	N/A	N/A
-```
-
-```sql
-SELECT entity, datetime AS 'time', tags.test01, tags.test02,
-    CONCAT(tags.test01, tags.test02) AS 'tags'
-FROM testunits610
-WHERE tags.test01 NOT IN ('t1_610', 't2_610')
-```
-Result:
-```
-| entity            | time                     | tags.test01 | tags.test02 | tags   | 
-|-------------------|--------------------------|-------------|-------------|--------| 
-| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |        | 
-| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null        |        | 
-| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | t2_610 | 
-| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | t2_610 | 
-| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | t2_610 | 
-| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | t2_610 | 
-| testinterpolent01 | 2016-08-20T13:10:09.000Z | null        | null        |        | 
-| testinterpolent01 | 2016-08-20T13:10:09.289Z | null        | null        |        | 
+| entity            | time                     | tags.test01 | tags.test02 | tags          | 
+|-------------------|--------------------------|-------------|-------------|---------------| 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | test01=t1_610 | 
 ```
 
 Using with REGEX function:
@@ -209,6 +142,44 @@ Result:
 | testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610 | 
 | testinterpolent02 | 2016-06-01T09:00:00.000Z | t1_610 | 
 | testinterpolent02 | 2016-06-01T09:12:00.000Z | t1_610 | 
+```
+
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+		AND  (UPPER (tags.test01) REGEX 'T1.*')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags          | 
+|-------------------|--------------------------|-------------|---------------| 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | test01=t1_610 | 
+```
+
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+		AND  (LOWER (REPLACE (tags.test01, 't1_610', 'T1!_STR')) REGEX '.*st.*')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags          | 
+|-------------------|--------------------------|-------------|---------------| 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | test01=t1_610 | 
 ```
 
 Using WHERE clause with string functions in combinations:
