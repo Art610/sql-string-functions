@@ -228,6 +228,113 @@ Result:
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
 ```
-
-
+WHERE clause with UPPER and SUBSTR and empty string argument in SUBSTR function:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (UPPER (SUBSTR (tags.test02, 8,9)) = '')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | tags                                                          | 
+|-------------------|--------------------------|-------------|-------------|---------------------------------------------------------------| 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | test01=t1_610                                                 | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
+```
+WHERE clause with UPPER and REPLACE functions:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (UPPER (REPLACE (tags.test02,  't2_61', 'test4#34')) = 'TEST4#340')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | tags                                                          | 
+|-------------------|--------------------------|-------------|-------------|---------------------------------------------------------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
+```
+WHERE clause with UPPER, LOWER and REPLACE functions:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND ((UPPER (REPLACE (tags.test02,  't2_61', 'test4#34')) <> 'TEST4#340')
+    OR (LOWER (REPLACE (tags.test02,  't2_61', 'low1#83')) != 'low1#830'))
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | tags          | 
+|-------------------|--------------------------|-------------|-------------|---------------| 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | test01=t1_610 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | test01=t1_610 | 
+```
+WHERE clause with LENGTH and REPLACE functions:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (LENGTH(REPLACE (tags.test02, 't2_61', 't'))  = 2)
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | tags                                                          | 
+|-------------------|--------------------------|-------------|-------------|---------------------------------------------------------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
+```
+WHERE clause with LOCATE:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND ( (LOCATE ('_6', tags.test02))  = 3)
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | 
+|-------------------|--------------------------|-------------|-------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | 
+```
+WHERE clause with SUBSTR:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND ( SUBSTR (tags.test02, 2, 3)  = '2_6')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | 
+|-------------------|--------------------------|-------------|-------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | 
+```
+WHERE clause with LOCATE and SUBSTR:
+```sql
 
