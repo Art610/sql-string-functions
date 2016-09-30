@@ -8,7 +8,7 @@ SELECT entity, datetime, tags.test01, tags.test02,
 FROM testunits610
 ```
 Result:
-```sql
+```iso
 | entity            | datetime                 | tags.test01 | tags.test02 | UpperTag1 | UpperTag2 | 
 |-------------------|--------------------------|-------------|-------------|-----------|-----------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |           |           | 
