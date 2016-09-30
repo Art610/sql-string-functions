@@ -211,4 +211,23 @@ Result:
 | testinterpolent02 | 2016-06-01T09:12:00.000Z | t1_610 | 
 ```
 
+Using WHERE clause with string functions in combinations:
+WHERE clause with UPPER and SUBSTR functions:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02, tags
+	FROM testunits610
+WHERE (datetime >= '2016-01-01T09:00:00.000Z' and datetime <= '2016-02-02T09:30:00.000Z')
+	AND (UPPER (SUBSTR (tags.test02, 1,3)) = 'T2_')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | tags                                                          | 
+|-------------------|--------------------------|-------------|-------------|---------------------------------------------------------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610                 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02=t2_610;test021=t21_610;test022=t22_610;test023=t23_610 | 
+```
+
+
 
