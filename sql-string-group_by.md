@@ -73,3 +73,27 @@ Result:
 | testinterpolent01 | 2066-09-24T13:00:00.000Z | INTERPOLENT01 | 16          | -233.468           | 
 | testinterpolent01 | 2018-09-20T09:00:00.000Z | INTERPOLENT01 | 16          | 4.657              | 
 ```
+
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02,
+    LENGTH (REPLACE (tags.test02, 't2_610', '3')) AS 'LENGTH_WITH_REPLACE'
+    FROM testUnits610 testunits611
+GROUP BY entity, time, tags, LENGTH (REPLACE (tags.test02, 't2_610', '3'))
+ORDER BY datetime ASC
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | LENGTH_WITH_REPLACE | 
+|-------------------|--------------------------|-------------|-------------|---------------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        | 0                   | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null        | 0                   | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | 0                   | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | 1                   | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | 1                   | 
+```
