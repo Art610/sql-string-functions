@@ -111,3 +111,104 @@ Result:
 | testinterpolent01 | TESTINTERPOLENT01 | 2016-02-01T10:00:00.000Z | 295.196  | t2_610      | 6               |        | test02 | t2_610 | 
 | testinterpolent01 | TESTINTERPOLENT01 | 2016-02-02T09:30:00.000Z | -701.205 | t2_610      | 6               |        | test02 | t2_610 | 
 ```
+
+Using with IN and NOT IN predicates:
+```sql
+SELECT entity, datetime AS 'time', value,
+    CONCAT(tags.test01, tags.test02) AS 'tags'
+	FROM testunits610
+WHERE tags.test02 IN ('t2_610')
+```
+Result:
+```
+| entity            | time                     | value    | tags   | 
+|-------------------|--------------------------|----------|--------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | -483.972 | t2_610 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | 483.924  | t2_610 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | 295.196  | t2_610 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205 | t2_610 | 
+```
+
+```sql
+SELECT entity, datetime AS 'time', value,
+    CONCAT(tags.test01, tags.test02) AS 'tags'
+	FROM testunits610
+WHERE tags.test02 IN ('t2_610', 'newtesttag')
+```
+Result:
+```
+| entity            | time                     | value    | tags       | 
+|-------------------|--------------------------|----------|------------| 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | -483.972 | t2_610     | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | 483.924  | t2_610     | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | 295.196  | t2_610     | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205 | t2_610     | 
+| testinterpolent01 | 2016-09-29T08:06:26.000Z | 123.0936 | newtesttag | 
+```
+
+```sql
+SELECT entity, datetime AS 'time', 
+    	ISNULL (tags.test01, 'N/A') AS 'tags.test01',
+    	ISNULL (tags.test02, 'N/A') AS 'tags.test02'
+	FROM testunits610
+WHERE tags.test02  NOT IN ('t2_610', 'newtesttag')
+```
+Result:
+```
+entity	time	tags.test01	tags.test02
+testinterpolent01	1981-09-20T08:00:00.000Z	N/A	N/A
+testinterpolent01	1996-09-20T08:00:00.000Z	N/A	N/A
+testinterpolent01	2016-01-01T09:00:00.000Z	t1_610	N/A
+testinterpolent01	2016-01-02T09:00:00.000Z	t1_610	N/A
+testinterpolent01	2016-01-02T09:30:00.000Z	t1_610	N/A
+testinterpolent01	2016-01-02T09:43:00.000Z	t1_610	N/A
+testinterpolent01	2016-01-02T10:00:00.000Z	t1_610	N/A
+testinterpolent01	2016-01-02T10:30:00.000Z	t1_610	N/A
+testinterpolent01	2016-01-02T11:00:00.000Z	t1_610	N/A
+testinterpolent01	2016-08-20T13:10:09.000Z	N/A	N/A
+testinterpolent01	2016-08-20T13:10:09.289Z	N/A	N/A
+```
+
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02,
+    CONCAT(tags.test01, tags.test02) AS 'tags'
+FROM testunits610
+WHERE tags.test01 NOT IN ('t1_610', 't2_610')
+```
+Result:
+```
+| entity            | time                     | tags.test01 | tags.test02 | tags   | 
+|-------------------|--------------------------|-------------|-------------|--------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |        | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null        |        | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | t2_610 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | t2_610 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | t2_610 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | t2_610 | 
+| testinterpolent01 | 2016-08-20T13:10:09.000Z | null        | null        |        | 
+| testinterpolent01 | 2016-08-20T13:10:09.289Z | null        | null        |        | 
+```
+
+Using with REGEX function:
+```sql
+SELECT entity, datetime AS 'time', 
+    CONCAT(tags.test01, tags.test02) AS 'tags'
+	FROM testunits610
+WHERE tags.test01 REGEX '.*t1.*'
+```
+Result:
+```
+| entity            | time                     | tags   | 
+|-------------------|--------------------------|--------| 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610 | 
+| testinterpolent02 | 2016-06-01T09:00:00.000Z | t1_610 | 
+| testinterpolent02 | 2016-06-01T09:12:00.000Z | t1_610 | 
+```
+
+
