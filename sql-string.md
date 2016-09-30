@@ -7,6 +7,7 @@ SELECT entity, datetime, tags.test01, tags.test02,
     LOWER (tags.test02) AS 'UpperTag2'
 FROM testunits610
 ```
+Result:
 ```sql
 | entity            | datetime                 | tags.test01 | tags.test02 | UpperTag1 | UpperTag2 | 
 |-------------------|--------------------------|-------------|-------------|-----------|-----------| 
@@ -31,7 +32,7 @@ SELECT entity, datetime, tags,
     LOWER (UPPER (entity)) AS 'LowUpEnt'
 FROM testunits610
 ```
-
+Result:
 ```sql
 | entity            | datetime                 | tags          | UpperEntity       | LowUpEnt          | 
 |-------------------|--------------------------|---------------|-------------------|-------------------| 
@@ -42,14 +43,14 @@ FROM testunits610
 | testinterpolent01 | 2016-01-02T09:30:00.000Z | test01=t1_610 | TESTINTERPOLENT01 | testinterpolent01 | 
 
 ```
-
+Using CONCAT string function:
 ```sql
 SELECT entity, datetime, value,  tags.test01 AS 'test01',
 	tags.test02 AS 'test02',
     CONCAT(tags.test01, tags.test02) AS 'CONCAT'
 FROM testunits610
 ```
-
+Result:
 ```sql
 | entity            | datetime                 | value       | test01 | CONCAT | test02 | 
 |-------------------|--------------------------|-------------|--------|--------|--------| 
@@ -67,6 +68,32 @@ FROM testunits610
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | 295.196     | null   | t2_610 | t2_610 | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205    | null   | t2_610 | t2_610 | 
 ```
+Using REPLACE string function:
+```sql
+SELECT entity, datetime AS 'time',  tags.test01, tags.test02,
+        REPLACE(tags.test01, 't1_610', 'test01') AS 'FirstReplace',
+        REPLACE(tags.test02, 't2_610', 'test02') AS 'SecondReplace'
+FROM testunits610
+```
+Result:
+```sql
+| entity            | time                     | tags.test01 | tags.test02 | FirstReplace | SecondReplace | 
+|-------------------|--------------------------|-------------|-------------|--------------|---------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |              |               | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null        |              |               | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | test01       |               | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      |              | test02        | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      |              | test02        | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      |              | test02        | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      |              | test02        | 
+```
+Using combination of string functions CONCAT and REPLACE:
 ```sql
 SELECT entity, datetime,  tags.test01, tags.test02,
     CONCAT (
@@ -75,7 +102,7 @@ SELECT entity, datetime,  tags.test01, tags.test02,
         AS 'ConcatWithReplace'
 FROM testunits610
 ```
-
+Result:
 ```sql
 | entity            | datetime                 | tags.test01 | tags.test02 | ConcatWithReplace | 
 |-------------------|--------------------------|-------------|-------------|-------------------| 
@@ -93,14 +120,18 @@ FROM testunits610
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02            | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02            | 
 ```
+Using LENGTH string function:
+```sql
 
+
+Using ISNULL string function: 
 ```sql
 SELECT entity, datetime AS 'time', 
 		ISNULL (tags.test01, 'N/A') AS 'test01',
     	ISNULL (tags.test02, 'N/A') AS 'test02'
 	FROM testunits610
 ```
-
+Result:
 ```sql
 | entity            | time                     | test01 | test02 | 
 |-------------------|--------------------------|--------|--------| 
