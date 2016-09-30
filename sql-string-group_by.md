@@ -24,3 +24,27 @@ Result:
 | testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | t2_610      | N/A         | 
 | testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | t2_610      | N/A         | 
 ```
+
+```sql
+SELECT entity, datetime AS 'time', tags.test01, 
+	LENGTH (tags.test01)
+	FROM testUnits610 testunits611
+	GROUP BY entity, time, tags.test01, 
+		LENGTH (tags.test01)
+	ORDER BY datetime ASC
+```
+Result:
+```
+| entity            | time                     | tags.test01 | LENGTH(tags.test01) | 
+|-------------------|--------------------------|-------------|---------------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | 0                   | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | 0                   | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | 6                   | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | 0                   | 
+```
