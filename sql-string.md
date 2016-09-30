@@ -68,6 +68,7 @@ Result:
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | 295.196     | null   | t2_610 | t2_610 | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205    | null   | t2_610 | t2_610 | 
 ```
+
 Using REPLACE string function:
 ```sql
 SELECT entity, datetime AS 'time',  tags.test01, tags.test02,
@@ -93,6 +94,7 @@ Result:
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      |              | test02        | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      |              | test02        | 
 ```
+
 Using combination of string functions CONCAT and REPLACE:
 ```sql
 SELECT entity, datetime,  tags.test01, tags.test02,
@@ -120,9 +122,27 @@ Result:
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02            | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02            | 
 ```
+
 Using LENGTH string function:
 ```sql
-
+SELECT entity, tags.test01,
+    LENGTH(tags.test01) AS 'Length'
+FROM testunits610
+```
+Result
+```sql
+| entity            | tags.test01 | Length | 
+|-------------------|-------------|--------| 
+| testinterpolent01 | null        | 0      | 
+| testinterpolent01 | null        | 0      | 
+| testinterpolent01 | t1_610      | 6      | 
+| testinterpolent01 | t1_610      | 6      | 
+| testinterpolent01 | t1_610      | 6      | 
+| testinterpolent01 | t1_610      | 6      | 
+| testinterpolent01 | t1_610      | 6      | 
+| testinterpolent01 | t1_610      | 6      | 
+| testinterpolent01 | t1_610      | 6      | 
+```
 
 Using ISNULL string function: 
 ```sql
@@ -150,3 +170,98 @@ Result:
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | N/A    | t2_610 | 
 ```
 
+Using LOCATE string function with 'entity' column:
+```sql
+SELECT
+    entity,
+    LOCATE ('ter', entity) AS 'Locate "ter"',
+    LOCATE ('01', entity) AS 'Locate "01"',
+    datetime AS 'time'
+FROM testunits610
+```
+Result:
+```sql
+| entity            | Locate "ter" | Locate "01" | time                     | 
+|-------------------|--------------|-------------|--------------------------| 
+| testinterpolent01 | 7            | 16          | 1981-09-20T08:00:00.000Z | 
+| testinterpolent01 | 7            | 16          | 1996-09-20T08:00:00.000Z | 
+| testinterpolent01 | 7            | 16          | 2016-01-01T09:00:00.000Z | 
+| testinterpolent01 | 7            | 16          | 2016-01-02T09:00:00.000Z | 
+| testinterpolent01 | 7            | 16          | 2016-01-02T09:30:00.000Z | 
+| testinterpolent01 | 7            | 16          | 2016-01-02T09:43:00.000Z | 
+| testinterpolent01 | 7            | 16          | 2016-01-02T10:00:00.000Z | 
+| testinterpolent02 | 7            | 0           | 2016-05-05T09:00:00.000Z | 
+| testinterpolent02 | 7            | 0           | 2016-05-05T09:30:00.000Z | 
+| testinterpolent02 | 7            | 0           | 2016-05-05T10:00:00.000Z | 
+| testinterpolent02 | 7            | 0           | 2016-06-01T09:00:00.000Z | 
+| testinterpolent02 | 7            | 0           | 2016-06-01T09:12:00.000Z | 
+| testinterpolent02 | 7            | 0           | 2016-07-01T09:00:00.000Z | 
+```
+Using LOCATE string function with tags:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02,
+    LOCATE ('_', tags.test01) AS 'LOCATE "_"',
+    LOCATE ('61', tags.test02) AS 'LOCATE "61"'
+FROM testunits610
+```
+Result:
+```sql
+| entity            | time                     | tags.test01 | tags.test02 | LOCATE "_" | LOCATE "61" | 
+|-------------------|--------------------------|-------------|-------------|------------|-------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        | 0          | 0           | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null        | 0          | 0           | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | 3          | 0           | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      | 0          | 4           | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      | 0          | 4           | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | 0          | 4           | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | 0          | 4           | 
+```
+
+Using SUBSTR string function with 'entity' column:
+```sql
+SELECT entity, datetime AS 'time',
+    SUBSTR (entity, 2, 4) AS 'SUBSTR "2-4"',
+    SUBSTR (entity, 12, 17) AS 'SUBSTR "12-17"'
+FROM testunits610
+```
+Result:
+```sql
+| entity            | time                     | SUBSTR "2-4" | SUBSTR "12-17" | 
+|-------------------|--------------------------|--------------|----------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | est          | lent01         | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | est          | lent01         | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | est          | lent01         | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | est          | lent01         | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | est          | lent01         | 
+```
+Using SUBSTR string function with tags:
+```sql
+SELECT entity, datetime AS 'time', tags.test01, tags.test02,
+	SUBSTR (tags.test01, 2, 4) AS 'SUBSTR "2-4',
+    SUBSTR (tags.test02, 3, 10) AS 'SUBSTR "3-10"'
+FROM testunits610
+```
+Result:
+```sql
+| entity            | time                     | tags.test01 | tags.test02 | SUBSTR "2-4 | SUBSTR "3-10" | 
+|-------------------|--------------------------|-------------|-------------|-------------|---------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |             |               | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | null        | null        |             |               | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610      | null        | 1_6         |               | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | null        | t2_610      |             | _610          | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | null        | t2_610      |             | _610          | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      |             | _610          | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      |             | _610          | 
+```
