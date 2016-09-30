@@ -8,7 +8,7 @@ SELECT entity, datetime, tags.test01, tags.test02,
 FROM testunits610
 ```
 Result:
-```iso
+```
 | entity            | datetime                 | tags.test01 | tags.test02 | UpperTag1 | UpperTag2 | 
 |-------------------|--------------------------|-------------|-------------|-----------|-----------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |           |           | 
@@ -33,7 +33,7 @@ SELECT entity, datetime, tags,
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | datetime                 | tags          | UpperEntity       | LowUpEnt          | 
 |-------------------|--------------------------|---------------|-------------------|-------------------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null          | TESTINTERPOLENT01 | testinterpolent01 | 
@@ -51,7 +51,7 @@ SELECT entity, datetime, value,  tags.test01 AS 'test01',
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | datetime                 | value       | test01 | CONCAT | test02 | 
 |-------------------|--------------------------|-------------|--------|--------|--------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | 292.589     | null   |        | null   | 
@@ -77,7 +77,7 @@ SELECT entity, datetime AS 'time',  tags.test01, tags.test02,
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | time                     | tags.test01 | tags.test02 | FirstReplace | SecondReplace | 
 |-------------------|--------------------------|-------------|-------------|--------------|---------------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |              |               | 
@@ -105,7 +105,7 @@ SELECT entity, datetime,  tags.test01, tags.test02,
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | datetime                 | tags.test01 | tags.test02 | ConcatWithReplace | 
 |-------------------|--------------------------|-------------|-------------|-------------------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |                   | 
@@ -130,7 +130,7 @@ SELECT entity, tags.test01,
 FROM testunits610
 ```
 Result
-```sql
+```
 | entity            | tags.test01 | Length | 
 |-------------------|-------------|--------| 
 | testinterpolent01 | null        | 0      | 
@@ -152,7 +152,7 @@ SELECT entity, datetime AS 'time',
 	FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | time                     | test01 | test02 | 
 |-------------------|--------------------------|--------|--------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | N/A    | N/A    | 
@@ -180,7 +180,7 @@ SELECT
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | Locate "ter" | Locate "01" | time                     | 
 |-------------------|--------------|-------------|--------------------------| 
 | testinterpolent01 | 7            | 16          | 1981-09-20T08:00:00.000Z | 
@@ -205,7 +205,7 @@ SELECT entity, datetime AS 'time', tags.test01, tags.test02,
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | time                     | tags.test01 | tags.test02 | LOCATE "_" | LOCATE "61" | 
 |-------------------|--------------------------|-------------|-------------|------------|-------------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        | 0          | 0           | 
@@ -231,7 +231,7 @@ SELECT entity, datetime AS 'time',
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | time                     | SUBSTR "2-4" | SUBSTR "12-17" | 
 |-------------------|--------------------------|--------------|----------------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | est          | lent01         | 
@@ -248,7 +248,7 @@ SELECT entity, datetime AS 'time', tags.test01, tags.test02,
 FROM testunits610
 ```
 Result:
-```sql
+```
 | entity            | time                     | tags.test01 | tags.test02 | SUBSTR "2-4 | SUBSTR "3-10" | 
 |-------------------|--------------------------|-------------|-------------|-------------|---------------| 
 | testinterpolent01 | 1981-09-20T08:00:00.000Z | null        | null        |             |               | 
