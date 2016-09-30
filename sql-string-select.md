@@ -69,6 +69,32 @@ Result:
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | -701.205    | null   | t2_610 | t2_610 | 
 ```
 
+Using CONCAT string function with 5 arguments:
+```sql
+SELECT entity, datetime, value,  
+	tags.test01 AS 'test01',
+    tags.test012 AS 'test012',
+	tags.test02 AS 'test02',
+    CONCAT(tags.test01, tags.test02, tags.test012, '', '-', 'arg-5') AS 'CONCAT'
+FROM testunits610
+```
+Result:
+```
+| entity            | datetime                 | value       | test01 | test012 | test02 | CONCAT       | 
+|-------------------|--------------------------|-------------|--------|---------|--------|--------------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | 292.589     | null   | null    | null   | -arg-5       | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | -292.589    | null   | null    | null   | -arg-5       | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | -7934.14159 | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | 897.328     | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | -728.394    | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | 827.349     | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | 615.729     | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | 159.832     | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | 492.73      | t1_610 | null    | null   | t1_610-arg-5 | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | -483.972    | null   | null    | t2_610 | t2_610-arg-5 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | 483.924     | null   | null    | t2_610 | t2_610-arg-5 | 
+```
+
 Using REPLACE string function:
 ```sql
 SELECT entity, datetime AS 'time',  tags.test01, tags.test02,
