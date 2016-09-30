@@ -1,5 +1,6 @@
 **Examles for SELECT expression:**
 
+Using UPPER and LOWER string functions:
 ```sql
 SELECT entity, datetime, tags.test01, tags.test02,
     UPPER (tags.test01) AS 'UpperTag1',
@@ -92,3 +93,29 @@ FROM testunits610
 | testinterpolent01 | 2016-02-01T10:00:00.000Z | null        | t2_610      | test02            | 
 | testinterpolent01 | 2016-02-02T09:30:00.000Z | null        | t2_610      | test02            | 
 ```
+
+```sql
+SELECT entity, datetime AS 'time', 
+		ISNULL (tags.test01, 'N/A') AS 'test01',
+    	ISNULL (tags.test02, 'N/A') AS 'test02'
+	FROM testunits610
+```
+
+```sql
+| entity            | time                     | test01 | test02 | 
+|-------------------|--------------------------|--------|--------| 
+| testinterpolent01 | 1981-09-20T08:00:00.000Z | N/A    | N/A    | 
+| testinterpolent01 | 1996-09-20T08:00:00.000Z | N/A    | N/A    | 
+| testinterpolent01 | 2016-01-01T09:00:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-01-02T09:00:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-01-02T09:30:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-01-02T09:43:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-01-02T10:00:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-01-02T10:30:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-01-02T11:00:00.000Z | t1_610 | N/A    | 
+| testinterpolent01 | 2016-02-01T09:00:00.000Z | N/A    | t2_610 | 
+| testinterpolent01 | 2016-02-01T09:30:00.000Z | N/A    | t2_610 | 
+| testinterpolent01 | 2016-02-01T10:00:00.000Z | N/A    | t2_610 | 
+| testinterpolent01 | 2016-02-02T09:30:00.000Z | N/A    | t2_610 | 
+```
+
